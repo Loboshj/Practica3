@@ -17,8 +17,22 @@ public class Despertador {
 		this.horaProgramada=time;
 		estado=StateDespertador.init(this);
 		piloto=new Piloto();
-		numPulsado=0;
-		
+		numPulsado=0;		
+	}
+	public void alarmaOff() {
+		estado.alarmaOff(this);
+	}
+	public void alarmaOn(Time hora) {
+		estado.alarmaOn(this, hora);	
+	}
+	public void buzz() {
+		estado.buzz(this);
+	}
+	public void snooze() {
+		estado.snooze(this);
+	}
+	public void stop() {
+		estado.stop(this);
 	}
 	public void pulsarSnooze() {
 		numPulsado++;

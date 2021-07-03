@@ -44,10 +44,14 @@ public class Despertador {
 		return numPulsado;
 	}
 	public void activarAlarma() {
-
+		if(buzz) {
+			System.out.println("Está sonando el pitido");
+		}else {
+			System.out.println("Está sonando la radio");
+		}
 	}
 	public void desactivarAlarma() {
-
+		System.out.println("Se ha apagado la alarma");
 	}
 	public void enciendePiloto() {
 		piloto.enciende();

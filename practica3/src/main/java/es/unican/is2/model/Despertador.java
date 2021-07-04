@@ -15,9 +15,10 @@ public class Despertador {
 	private int numPulsado;
 	public Despertador(Time time) {
 		this.horaProgramada=time;
-		estado=StateDespertador.init(this);
 		piloto=new Piloto();
-		numPulsado=0;		
+		estado=StateDespertador.init(this);
+		numPulsado=0;	
+		intervaloSnooze=5;
 	}
 	public void alarmaOff() {
 		estado.alarmaOff(this);
@@ -76,6 +77,7 @@ public class Despertador {
 	}
 	public void setIntervalo(int intervalo) {
 		intervaloSnooze=intervalo;
+		System.out.println(intervalo);
 	}
 	public int getIntervalo() {
 		return intervaloSnooze;

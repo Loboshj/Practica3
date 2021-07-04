@@ -14,6 +14,7 @@ public class StateSonando extends StateDespertador{
 
 	@Override
 	public void entryAction(Despertador contexto) {
+		contexto.activarAlarma();
 		intervalo=new Intervalo(contexto);
 		timer.schedule(intervalo, contexto.getIntervaloAlarmaMs());
 	}
@@ -21,7 +22,7 @@ public class StateSonando extends StateDespertador{
 
 	@Override
 	public void exitAction(Despertador contexto) {
-		// TODO Auto-generated method stub
+		contexto.desactivarAlarma();
 
 	}
 

@@ -1,6 +1,8 @@
 package es.unican.is2.model.states;
 
 import java.sql.Time;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -13,14 +15,24 @@ public class StateProgramado extends StateDespertador{
 
 	@Override
 	public void entryAction(Despertador contexto) {
+		Calendar c=Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY, contexto.getHoraProgramada().getHours());
+		c.set(Calendar.MINUTE, contexto.getHoraProgramada().getMinutes());
+		c.set(Calendar.SECOND, 0);
+		if(c.getTimeInMillis()<System.currentTimeMillis()){
+			c.add(Calendar.DATE, 1);
+		}
 		programacion=new Programacion(contexto);
-		timer.schedule(programacion, contexto.getHoraProgramada());
+		Date time=c.getTime();
+		timer.schedule(programacion,time);
 		contexto.enciendePiloto();
+	System.out.println(time);
 	}
+	
 
 	@Override
 	public void exitAction(Despertador contexto) {
-		
+		programacion.cancel();
 	}
 
 	@Override
@@ -31,6 +43,20 @@ public class StateProgramado extends StateDespertador{
 	@Override
 	public void alarmaOn(Despertador contexto, Time hora) {
 		contexto.cambiaHora(hora);
+		programacion.cancel();
+		Calendar c=Calendar.getInstance();
+		c.set(Calendar.HOUR_OF_DAY, contexto.getHoraProgramada().getHours());
+		c.set(Calendar.MINUTE, contexto.getHoraProgramada().getMinutes());
+		c.set(Calendar.SECOND, 0);
+		if(c.getTimeInMillis()<System.currentTimeMillis()){
+			c.add(Calendar.DATE, 1);
+		}
+		programacion=new Programacion(contexto);
+		Date time=c.getTime();
+		timer.schedule(programacion,time);
+		contexto.enciendePiloto();
+	System.out.println(time);
+		
 	}
 
 	@Override
@@ -63,6 +89,7 @@ public class StateProgramado extends StateDespertador{
 			this.contexto=contexto;
 		}
 		public void run(){
+			System.out.println("alarma");
 			exitAction(contexto);
 			contexto.setState(sonando);
 			sonando.entryAction(contexto);

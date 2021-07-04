@@ -6,8 +6,18 @@ import java.awt.EventQueue;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import es.unican.is2.controller.AlarmaOffAction;
+import es.unican.is2.controller.AlarmaOnAction;
+import es.unican.is2.controller.BuzzAction;
+import es.unican.is2.controller.SnoozeAction;
+import es.unican.is2.controller.SnoozeController;
+import es.unican.is2.controller.StopAction;
+import es.unican.is2.model.Despertador;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Time;
 import java.awt.event.ActionEvent;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -19,6 +29,7 @@ public class InterfazGrafica extends JFrame {
 	private JPanel contentPane;
 	private JComboBox selHoras;
 	private JComboBox selMinutos;
+	private JComboBox selInterSnooze;
 
 	/**
 	 * Launch the application.
@@ -40,6 +51,8 @@ public class InterfazGrafica extends JFrame {
 	 * Create the frame.
 	 */
 	public InterfazGrafica() {
+		System.out.println(System.currentTimeMillis());
+		Despertador despertador=new Despertador(new Time(0,0,0));
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -48,14 +61,12 @@ public class InterfazGrafica extends JFrame {
 		contentPane.setLayout(null);
 
 		JButton btnAlarmaOn = new JButton("Alarma On");
+		btnAlarmaOn.addActionListener(new AlarmaOnAction(this,despertador));
 		btnAlarmaOn.setBounds(61, 38, 103, 49);
 		contentPane.add(btnAlarmaOn);
 
 		JButton btnAlarmaOff = new JButton("Alarma off");
-		btnAlarmaOff.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		btnAlarmaOff.addActionListener(new AlarmaOffAction(this,despertador));
 		btnAlarmaOff.setBounds(61, 162, 103, 49);
 		contentPane.add(btnAlarmaOff);
 
@@ -85,47 +96,46 @@ public class InterfazGrafica extends JFrame {
 		contentPane.add(selMinutos);
 
 		JButton btnSnooze = new JButton("Snooze");
-		btnSnooze.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-			}
-		});
+		btnSnooze.addActionListener(new SnoozeAction(this,despertador));
 		selMinutos.setModel(new DefaultComboBoxModel(minutos));
 
 		btnSnooze.setBounds(210, 38, 118, 49);
 		contentPane.add(btnSnooze);
 
 		JButton btnStop = new JButton("Stop");
-		btnStop.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			}
-		});
+		btnStop.addActionListener(new StopAction(this,despertador));
 		btnStop.setBounds(210, 103, 118, 49);
 		contentPane.add(btnStop);
 
 		JButton btnBuzz = new JButton("Buzz");
 		btnBuzz.setBounds(210, 162, 118, 49);
 		contentPane.add(btnBuzz);
-
+		btnBuzz.addActionListener(new BuzzAction(this,despertador));
 		JLabel lblTiempoSnooze = new JLabel("Tiempo Snooze");
 		lblTiempoSnooze.setBounds(343, 27, 81, 14);
 		contentPane.add(lblTiempoSnooze);
 
-		JComboBox selInterSnooze = new JComboBox();
+		selInterSnooze = new JComboBox();
 		selInterSnooze.setModel(new DefaultComboBoxModel(new String[] {"5", "10", "15"}));
 		selInterSnooze.setBounds(338, 45, 57, 35);
 		contentPane.add(selInterSnooze);
+		selInterSnooze.addActionListener(new SnoozeController(this,despertador));
 
 		JPanel piloto = new JPanel();
 		piloto.setBounds(343, 103, 34, 34);
 		contentPane.add(piloto);
-		
-		
+
+
 	}
 	public int getHoras(){
-		return (Integer) (selHoras.getItemAt(selHoras.getSelectedIndex()));
+		return Integer.valueOf((String) (selHoras.getItemAt(selHoras.getSelectedIndex())));
 	}
 	public int getMinutos(){
-		return (Integer) (selMinutos.getItemAt(selMinutos.getSelectedIndex()));
+		return Integer.valueOf((String) (selMinutos.getItemAt(selMinutos.getSelectedIndex())));
 	}
-	
+	public int getSnooze() {
+		return Integer.valueOf((String) (selInterSnooze.getItemAt(selInterSnooze.getSelectedIndex())));
+
+	}
+
 }
